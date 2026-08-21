@@ -1,0 +1,33 @@
+Copyright (c) 2026. All rights reserved.
+
+Heph and its source code are proprietary. This is not open-source software
+and no open-source licence is granted.
+
+You may not copy, modify, distribute, sublicense, sell, or create derivative
+works from any part of this software, in source or binary form, without prior
+written permission from the copyright holder.
+
+EVALUATION
+
+Builds provided for evaluation or testing are licensed to the named recipient
+only, for the sole purpose of evaluating the software, and may not be
+redistributed. That permission may be withdrawn at any time.
+
+NO WARRANTY
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+Heph produces engineering output. Verify anything it generates before you
+manufacture, assemble or power it. Nothing it reports is a substitute for
+your own judgement.
+
+THIRD-PARTY COMPONENTS
+
+Heph is built on, and its application bundle redistributes, open-source
+software owned by others and licensed separately. Those licences continue to
+apply to those components and are unaffected by the terms above. See NOTICE.
