@@ -1,21 +1,21 @@
 <img src="docs/media/lockup.png" alt="HEPH-3D — text to machine" width="560">
 
-> **This is the public home for HEPH-3D.** The source is private — what you'll find
-> here is the demo, the full documentation, and how to get a build.
-> The app lives at **[heph3d.com](https://heph3d.com)**.
-
 **Machines, not models.** Describe one; get printable, validated files for a
 machine that works when you assemble it.
 
-[![download](https://img.shields.io/badge/download-v0.1.7-2ea043?style=flat-square)](https://heph3d.com/#access)
+[![download](https://img.shields.io/badge/download-v0.1.8-2ea043?style=flat-square)](https://heph3d.com/#access)
 [![platforms](https://img.shields.io/badge/platforms-macOS%20%C2%B7%20Windows%20%C2%B7%20Linux-2C5DD0?style=flat-square)](#the-studio)
 [![kernel](https://img.shields.io/badge/OpenCASCADE-real%20CAD%20kernel-c0392b?style=flat-square)](https://github.com/gumyr/build123d)
-[![tests](https://img.shields.io/badge/tests-257%20passing-2ea043?style=flat-square)](#tests)
+![tests](https://img.shields.io/badge/tests-369%20passing-2ea043?style=flat-square)
 [![licence](https://img.shields.io/badge/licence-proprietary-8a95a3?style=flat-square)](LICENSE)
 
 ![HEPH-3D Studio](docs/media/demo.gif)
 
 <sub>[Full demo (39s, no sound)](docs/media/demo.mp4)</sub>
+
+> **This is the public home for HEPH-3D.** The source is private — what you'll find
+> here is the demo, the documentation, and how to get a build.
+> The app lives at **[heph3d.com](https://heph3d.com)**.
 
 Describe a thing; get a folder of validated files you can print, a costed list
 of parts you can buy, and a machine that works when you assemble it.
@@ -40,8 +40,13 @@ One command runs all of it:
 From that sentence: **10 components chosen and sourced**,
 a solved internal layout, a lofted enclosure sized to what is inside it with
 **connector openings cut from the components' own keepouts**, a routed harness
-with **73% of its wire bundled into shared trunks**, printed cable clips, full
-validation, and a shipped bundle — **$110, 606g, 21 files, QC PASS**.
+with **68% of its wire bundled into shared trunks**, printed cable clips, full
+validation, and a shipped bundle — **$118.99, 617g, 29 files, QC PASS**.
+
+The wheels, caster, camera and distance sensor are bought, priced and weighed,
+but they mount outside the shell and are not placed in the model: you fit them,
+and the four warnings QC passes with are the sensor's wires, which you run by
+hand.
 
 ## The Studio
 
@@ -54,16 +59,20 @@ demo, the documentation, and how to get access. Builds are handed out by tester
 code at [heph3d.com](https://heph3d.com/#access).
 
 **It updates itself.** *Tools ▾ → Check for updates* downloads the new build,
-checks the version inside it really is the one it claims, installs it over the
-running copy and reopens — on macOS, Windows and Linux. The code you first
+checks it against the release's own SHA-256 checksum, installs it over the
+running copy and reopens — on macOS, Windows and Linux. A download that cannot
+be vouched for is shown to you in its folder instead of being installed. The code you first
 entered is remembered, so the site is only needed once.
 
-**Claude, either way.** The terminal pane runs Claude Code in the Studio itself.
-Or hand the project to **Claude Desktop** — it opens a new **Code** session with
-the folder already selected and brings the 3D view up beside the chat. With both
-installed the Studio asks which you want; with one, it just uses it.
+**Claude or Codex.** The terminal pane runs Claude Code in the Studio itself,
+or OpenAI's **Codex** CLI if that is what you use -- either one gets the same
+tools for building and checking the machine. Or hand the project to **Claude
+Desktop** — it opens a new **Code** session with the folder already selected and
+brings the 3D view up beside the chat. With more than one installed the Studio
+asks which you want; with one, it just uses it. Switch any time from
+*Tools ▾ → Assistant*.
 
-> **macOS 11+, Apple Silicon and Intel.** The app is signed but not
+> **macOS 12+, Apple Silicon and Intel.** The app is signed but not
 > *notarised*, so macOS says it *"could not verify HEPH-3D is free of malware"*
 > and offers only *Move to Trash*. Nothing is wrong with the build. Drag it to
 > Applications, then run this once:
@@ -73,15 +82,9 @@ installed the Studio asks which you want; with one, it just uses it.
 > ```
 >
 > On macOS 15 and later, right-click → **Open** no longer works — Apple removed
-> it. Requires [Claude Code](https://claude.com/claude-code) installed and
-> signed in; HEPH-3D runs your own copy under your own account.
-
-Or run it from a checkout — `HEPH-3D.command`, double-clicked, starts the
-Studio and opens a browser. Or from a shell:
-
-```bash
-./run.sh studio            # http://127.0.0.1:8810
-```
+> it. Requires [Claude Code](https://claude.com/claude-code) or
+> [Codex](https://github.com/openai/codex) installed and signed in;
+> HEPH-3D runs your own copy under your own account.
 
 ![The Studio: a machine exploded along its parting axis, its bill of materials priced, and Claude Code live in the same window](docs/media/studio.png)
 
@@ -150,6 +153,9 @@ That layer is what this is.
 
 ## Quick start
 
+The command lines in this README are HEPH's own command-line tool, from the
+source; they are shown so each step is concrete.
+
 Describe the machine and let it build one:
 
 ```bash
@@ -178,9 +184,10 @@ A design is an ordinary Python module exposing `build() -> Assembly`. Keeping
 the entry point that plain means it is a script you can run, import, diff and
 test, rather than a proprietary document.
 
-**Your machines are yours.** They are saved to `~/Documents/HEPH-3D`, never
-inside this repository and never inside the app bundle. Nothing you design is
-part of the tool.
+**Your machines are yours.** Projects are saved to `~/Documents/HEPH-3D`, never
+inside the app bundle, so updating never touches them. Nothing you design is
+part of the tool. On the command line, `make` and `ship` write their bundle to
+`./out/<name>` unless you pass `-o`.
 
 ## What gets validated
 
@@ -211,14 +218,20 @@ out. Five things are checked that a schematic cannot know on its own:
 **Stall, not running peak.** A motor draws three to four times its running
 current when the shaft cannot turn, which happens on every start-up and every
 time the machine hits something. Sizing on running peak passes every check and
-fails the robot. Motors are fed from the pack rather than the logic rail, so a
-stall cannot pull the brain's supply down with it, and the budget is reported
-per rail:
+fails the robot. Motors behind a driver are fed from the pack rather than the
+logic rail, so a stall cannot pull the brain's supply down with it. A hobby
+servo has its driver inside it and takes 5V on its own lead, so it goes on the
+5V rail, its stall is counted there, and the converter is sized for it. The
+budget is reported per rail -- this is the robot above:
 
-```
-pack   8.00 A limit   1.20 A peak   3.20 A stalled   +4.80 A spare
-5v     5.00 A limit   5.30 A peak                    -0.30 A
-```
+| Rail | Supply | Limit | Peak | Stalled | Spare |
+|---|---|---|---|---|---|
+| pack | pack (+ 5V rail at its input) | 8.00 A | 2.95 A | 4.95 A | +3.05 A |
+| 5v | 5V rail | 5.00 A | 3.30 A | 3.30 A | +1.70 A |
+
+It also chose a Pi 4 over a Pi 5 for it, because a Pi 5 with the same
+peripherals needs 5.3A of 5V and no converter in the catalogue supplies more
+than 5A -- and says so in its notes.
 
 **Voltage drop**, once the harness has a physical path — the one electrical
 quantity that needs the geometry. The loop is the supply conductor *and* the
@@ -228,8 +241,10 @@ return; counting only one halves it and clears a run that does not work.
 end of it does not. The connector is what melts, and checking only the wire
 clears the joint that fails.
 
-**Fuse sizing** off the stall figure at 1.5×, so it survives inrush rather than
-blowing at switch-on and teaching you to fit a bigger one.
+**Fuse sizing** off the worst case at the pack -- motors stalled, converters
+charged for their input current -- at 1.5×, so it survives inrush rather than
+blowing at switch-on and teaching you to fit a bigger one. When no standard
+fuse size covers it, it says so instead of rounding up.
 
 **A way to put the charge back.** A machine that stores energy and has nothing
 that can refill it — no charger, no socket, no panel — fails inspection rather
@@ -299,7 +314,7 @@ discarded the moment the call returned a float.
 
 | Measure | Nominal | Accept | Why | Declared at |
 |---|---|---|---|---|
-| Ø3.86 hole at (17.68, 17.68) | 3.86 mm | 3.66 – 3.96 | must accept a 3mm shaft as a free fit | `design.py:176` |
+| Ø3.86 hole at (17.68, 17.68) | 3.76 mm | 3.56 – 3.86 | must accept a 3mm shaft as a free fit | `design.py:176` |
 | overall length | 114.58 mm | 114.35 – 114.81 | catches a mis-scaled or badly shrunk print | - |
 
 Every cylindrical face is pulled from the solid — axis, diameter, depth, hole
@@ -311,7 +326,9 @@ The accept band is not an invented tolerance. It comes from the profile's own
 fit ladder: a hole cut for a running fit is out of band once it has tightened
 to a snug fit or opened to a free one. Both ends are real failures with names,
 and the band moves correctly when you calibrate, change material or change
-nozzle. `INSPECTION.md` ships in every bundle.
+nozzle. The nominal is what the print should measure, not what was modelled: a
+hole is drawn oversize by exactly what the printer takes back, so the Ø3.86 bore
+above should read 3.76. `INSPECTION.md` ships in every bundle.
 
 ## Profiles
 
@@ -323,9 +340,12 @@ PROFILE = Profile.get("x1c", "petg")
 BORE = PROFILE.bore(6.0, Fit.RUNNING)
 ```
 
-Nine printers, eight materials. Ooze/swell, thermal shrinkage and hole
-undersizing are corrected automatically -- a nominal 5mm hole prints at about
-4.8mm, and the profile compensates so you do not have to remember.
+Nine printers, eight materials. Ooze/swell and hole undersizing are corrected
+automatically -- a nominal 5mm hole prints at about 4.8mm, and the profile
+compensates so you do not have to remember. Thermal shrinkage is corrected once
+you have measured it: a calibrated profile scales the exported STL and 3MF so
+parts cool onto size; until then `PRINT.md` gives the scale to set in your
+slicer.
 
 ### Calibrate it to your machine
 
@@ -395,7 +415,7 @@ checklist:
 ```
 
 The sheet asks for what you can actually measure. The catalogue stores hole
-*positions* — `(-29.0, -24.5)` — and nobody has ever put a caliper on a board
+*positions* — `(-39.0, -24.5)` — and nobody has ever put a caliper on a board
 and read off a coordinate, so it asks for the distance across the outermost
 holes and rescales the pattern about its own centre. That corrects the size
 while preserving the shape, which was never the part in doubt.
@@ -432,58 +452,6 @@ bracket into a wrong cut file.
   and heat-set bosses, keyed shafts
 - `springs` -- helical, leaf and spiral springs, with the beam equations attached
 - `enclosure` -- shells, panels, windows, hoppers, chutes, vents
-
-## As a Claude Code skill
-
-```bash
-./install.sh
-```
-
-Installs `skill/` to `~/.claude/skills/heph/`. After that, asking Claude
-Code to design a printable object routes through this pipeline.
-
-## Tests
-
-```bash
-uv run --with build123d --with trimesh --with numpy --with rtree \
-       --with scipy --with networkx --with matplotlib --with pytest \
-       python -m pytest tests/ -q
-```
-
-257 tests. Most of them exist because the behaviour they assert was once wrong
-in a way that produced a plausible-looking result instead of an error -- an
-interference check that returned 0.0 for every pair, gears that did not roll, a
-spring with negative volume, a wall-thickness check that failed sound parts, a
-harness that reported every net routed while the wire ran through a servo.
-
-## Layout
-
-```
-heph/
-  profiles.py     printers, materials, fit classes
-  assembly.py     Part, Joint, Interface, Assembly, kinematics
-  validate.py     interference, sweeps, printability
-  concept.py      the massing/blockout stage
-  electronics.py  nets, power budget, harness routing
-  sourcing.py     bill of materials and buy links
-  formats.py      every export format
-  qc.py           the final inspection
-  session.py      projects
-  ship.py         export, renders, generated documents
-  mcp_server.py   the MCP bridge (no dependencies)
-  cli.py
-  mech/           gears, motion, joints, springs, enclosure
-  parts/          component catalogue, mounting, detail geometry
-studio/           the 3D workspace (FastAPI + three.js + a pty)
-desktop/          the macOS app (Tauri)
-site/             heph3d.com -- the public page and the tester download gate
-skill/            the Claude Code skill
-tests/
-```
-
-Everything lives in this one private repository, on `main`. Builds are published
-as releases here; the site hands them to testers who have a code, so the repo
-itself never has to be shared.
 
 **Proprietary.** All rights reserved — see [LICENSE](LICENSE).
 

@@ -1,0 +1,64 @@
+Third-party components
+======================
+
+Heph is proprietary, but it is built on open-source software, and the
+application bundles for macOS, Windows and Linux *redistribute* that software
+inside themselves. Those licences apply to those components regardless of
+Heph's own terms, and several of them carry obligations that shipping a
+binary triggers.
+
+This file is the acknowledgement those licences require. It is not legal
+advice, and the list below should be reviewed before any paid release.
+
+Redistributed in the application bundle
+---------------------------------------
+
+  CPython                     Python Software Foundation License
+                              https://docs.python.org/3/license.html
+
+  Open CASCADE Technology     LGPL-2.1 with an additional exception
+  (via cadquery-ocp / OCP)    https://dev.opencascade.org/resources/licensing
+
+      READ THIS ONE. OCCT is LGPL. Distributing it inside a closed
+      application is permitted, but LGPL-2.1 requires that the recipient can
+      replace the library -- in practice, that the OCCT components stay
+      separately linked and replaceable, that this notice names it, and that
+      the licence text travels with the build. It is dynamically linked here,
+      which is the arrangement LGPL expects. Do not statically link it into a
+      closed binary without taking advice.
+
+  build123d                   Apache-2.0
+  trimesh                     MIT
+  numpy, scipy                BSD-3-Clause
+  networkx                    BSD-3-Clause
+  matplotlib                  PSF-based (matplotlib licence)
+  lxml                        BSD-3-Clause
+  manifold3d                  Apache-2.0
+  scikit-image                BSD-3-Clause
+  fastapi, pydantic           MIT
+  starlette, uvicorn,         BSD-3-Clause
+  websockets
+  Rtree                       MIT
+  pywinpty (Windows only)     MIT
+
+Bundled in the front end
+------------------------
+
+  three.js                    MIT
+  xterm.js                    MIT
+
+Compiled into the desktop application
+-------------------------------------
+
+  Tauri, and the crates.io    MIT / Apache-2.0
+  libraries it links          Linked into the app's own binary, so they are
+                              redistributed too, and their notices apply.
+
+Not bundled, invoked if present
+-------------------------------
+
+  Claude Code                 Anthropic's own terms. Heph runs whatever
+                              `claude` binary is already on the user's
+                              machine, under that user's own account and
+                              subscription. Nothing of Anthropic's is
+                              redistributed here.
